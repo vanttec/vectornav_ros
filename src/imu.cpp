@@ -9,7 +9,7 @@
 #include "sensor_msgs/Temperature.h"
 #include "nav_msgs/Odometry.h"
 #include <math.h>
-#include <Eigen/Dense>
+#include <eigen3/Eigen/Dense>
 
 using namespace std;
 using namespace vn::math;
