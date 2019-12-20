@@ -28,14 +28,14 @@ int main(int argc, char *argv[])
 	vs.connect(SensorPort, SensorBaudrate);
 
 	//ROS Publishers for each required sensor data
-	ros::Publisher ins_pos_pub = n.advertise<geometry_msgs::Pose2D>("ins_pose", 1000);
+	ros::Publisher ins_pos_pub = n.advertise<geometry_msgs::Pose2D>("/vectornav/ins_2d/ins_pose", 1000);
 	//ros::Publisher ins_vel_pub = n.advertise<geometry_msgs::Vector3>("ins_vel", 1000);
 	//ros::Publisher ins_acc_pub = n.advertise<geometry_msgs::Vector3>("ins_acc", 1000);
 	//ros::Publisher ins_ar_pub = n.advertise<geometry_msgs::Vector3>("ins_ar", 1000);
-	ros::Publisher local_vel_pub = n.advertise<geometry_msgs::Vector3>("local_vel", 1000);
-	ros::Publisher NED_pose_pub = n.advertise<geometry_msgs::Pose2D>("NED_pose", 1000);
+	ros::Publisher local_vel_pub = n.advertise<geometry_msgs::Vector3>("/vectornav/ins_2d/local_vel", 1000);
+	ros::Publisher NED_pose_pub = n.advertise<geometry_msgs::Pose2D>("/vectornav/ins_2d/NED_pose", 1000);
 	//ros::Publisher ECEF_pose_pub = n.advertise<geometry_msgs::Pose2D>("ECEF_pose", 1000);
-	ros::Publisher ref_pub = n.advertise<geometry_msgs::Pose2D>("ref", 1000);
+	ros::Publisher ref_pub = n.advertise<geometry_msgs::Pose2D>("/vectornav/ins_2d/ref", 1000);
 
 
 	//Transformation of coordinates Geodetic-Ecef-NED for the reference

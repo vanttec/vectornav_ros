@@ -217,3 +217,13 @@ add_executable(ins_2d src/ins_2d.cpp)
 target_link_libraries(ins_2d ${catkin_LIBRARIES})
 target_link_libraries(ins_2d PRIVATE libvncxx)
 target_link_libraries(ins_2d LINK_PUBLIC pthread)
+
+add_executable(ins_3d src/ins_3d.cpp)
+target_link_libraries(ins_3d ${catkin_LIBRARIES})
+target_link_libraries(ins_3d PRIVATE libvncxx)
+target_link_libraries(ins_3d LINK_PUBLIC pthread)
+
+add_executable(imu src/imu.cpp)
+target_link_libraries(imu ${catkin_LIBRARIES})
+target_link_libraries(imu PRIVATE libvncxx)
+target_link_libraries(imu LINK_PUBLIC pthread)

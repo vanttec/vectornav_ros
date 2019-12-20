@@ -1,0 +1,5 @@
+<launch>
+
+    <node pkg="vectornav-ros" type="ins_3d" name="ins_3d" />
+
+</launch>

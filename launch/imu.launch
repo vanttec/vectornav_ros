@@ -1,0 +1,5 @@
+<launch>
+
+    <node pkg="vectornav-ros" type="imu" name="imu" />
+
+</launch>
