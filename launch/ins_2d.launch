@@ -1,0 +1,5 @@
+<launch>
+
+    <node pkg="vectornav" type="ins_2d" name="ins_2d" />
+
+</launch>
