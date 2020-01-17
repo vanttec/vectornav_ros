@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
 	ros::Publisher local_vel_pub = n.advertise<geometry_msgs::Vector3>("/vectornav/ins_2d/local_vel", 1000);
 	ros::Publisher NED_pose_pub = n.advertise<geometry_msgs::Pose2D>("/vectornav/ins_2d/NED_pose", 1000);
 	//ros::Publisher ECEF_pose_pub = n.advertise<geometry_msgs::Pose2D>("ECEF_pose", 1000);
-	ros::Publisher ins_ref_pub = n.advertise<geometry_msgs::Vector3>("/vectornav/ins_2d/ins_ref", 1000);
+	ros::Publisher ins_ref_pub = n.advertise<geometry_msgs::Pose2D>("/vectornav/ins_2d/ins_ref", 1000);
 	//ros::Publisher ecef_ref_pub = n.advertise<geometry_msgs::Vector3>("/vectornav/ins_2d/ecef_ref", 1000);
 
 	//Transformation of coordinates Geodetic-Ecef-NED for the reference
