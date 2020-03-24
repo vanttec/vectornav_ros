@@ -4,6 +4,7 @@
 #include "ros/ros.h"
 #include "geometry_msgs/Pose2D.h"
 #include "geometry_msgs/Vector3.h"
+#include "std_msgs/Empty.h"
 #include <math.h>
 #include <eigen3/Eigen/Dense>
 
@@ -13,6 +14,65 @@ using namespace vn::sensors;
 using namespace vn::protocol::uart;
 using namespace vn::xplat;
 using namespace Eigen;
+
+//Transformation of coordinates Geodetic-Ecef-NED for the reference
+int R_Ea = 6378137; //Earth radious
+float eccentricity = 0.08181919; //The eccentricity of the geodetic plane
+InsStateLlaRegister ref; //reference (starting) data
+InsStateEcefRegister Ecefref;
+float Ecefrefx = 0;
+float Ecefrefy = 0;
+float Ecefrefz = 0;
+float refposx = 0;
+float refposy = 0;
+Vector3f Pe_ref;
+Matrix3f Rne;
+geometry_msgs::Pose2D ins_ref;
+geometry_msgs::Vector3 ecef_ref;
+bool reset = false;
+
+int ResetNed(InsStateLlaRegister _ref, InsStateEcefRegister _Ecefref)
+{
+	for (int i=1;i<=20;i++)
+	{
+		Ecefrefx = Ecefrefx + _Ecefref.position.x;
+		Ecefrefy = Ecefrefy + _Ecefref.position.y;
+		Ecefrefz = Ecefrefz + _Ecefref.position.z;
+		refposx = refposx + _ref.position.x;
+		refposy = refposy + _ref.position.y;
+	}
+
+	Ecefrefx = Ecefrefx/20;
+	Ecefrefy = Ecefrefy/20;
+	Ecefrefz = Ecefrefz/20;
+	refposx = refposx/20;
+	refposy = refposy/20;
+
+	float refx = (3.141592 / 180)*(refposx);
+	float refy = (3.141592 / 180)*(refposy);
+
+	Pe_ref << Ecefrefx,
+			  Ecefrefy,
+			  Ecefrefz;
+
+	Rne << -sin(refx) * cos(refy), -sin(refx) * sin(refy), cos(refx),
+		   -sin(refy), cos(refy), 0,
+		   -cos(refx) * cos(refy), -cos(refx) * sin(refy), -sin(refx);
+
+	ins_ref.x = refposx;
+	ins_ref.y = refposy;
+	ins_ref.theta = (3.141592 / 180)*(ref.yawPitchRoll.x);
+
+	ecef_ref.x = Ecefrefx;
+	ecef_ref.y = Ecefrefy;
+	ecef_ref.z = Ecefrefz;
+
+}
+
+void resetNedCallback(const std_msgs::Empty::ConstPtr& _reset)
+{
+  reset = true;
+}
 
 int main(int argc, char *argv[])
 {
@@ -38,64 +98,23 @@ int main(int argc, char *argv[])
 	ros::Publisher ins_ref_pub = n.advertise<geometry_msgs::Pose2D>("/vectornav/ins_2d/ins_ref", 1000);
 	//ros::Publisher ecef_ref_pub = n.advertise<geometry_msgs::Vector3>("/vectornav/ins_2d/ecef_ref", 1000);
 
-	//Transformation of coordinates Geodetic-Ecef-NED for the reference
-	int R_Ea = 6378137; //Earth radious
-	float eccentricity = 0.08181919; //The eccentricity of the geodetic plane
-	InsStateLlaRegister ref; //reference (starting) data
-	//TODO check InsState vs InsState
+	ros::Subscriber ned_reset_sub = n.subscribe("/vectornav/ins_2d/reset_ned", 1000, resetNedCallback);
+
 	ref = vs.readInsStateLla();
-
-	InsStateEcefRegister Ecefref;
 	Ecefref = vs.readInsStateEcef();
-	
-	float Ecefrefx = 0;
-	float Ecefrefy = 0;
-	float Ecefrefz = 0;
-	float refposx = 0;
-	float refposy = 0;
-
-	for (int i=1;i<=20;i++)
-	{
-		Ecefrefx = Ecefrefx + Ecefref.position.x;
-		Ecefrefy = Ecefrefy + Ecefref.position.y;
-		Ecefrefz = Ecefrefz + Ecefref.position.z;
-		refposx = refposx + ref.position.x;
-		refposy = refposy + ref.position.y;
-	}
-
-	Ecefrefx = Ecefrefx/20;
-	Ecefrefy = Ecefrefy/20;
-	Ecefrefz = Ecefrefz/20;
-	refposx = refposx/20;
-	refposy = refposy/20;
-
-	float refx = (3.141592 / 180)*(refposx);
-	float refy = (3.141592 / 180)*(refposy);
-
-	Vector3f Pe_ref;
-	Pe_ref << Ecefrefx,
-			  Ecefrefy,
-			  Ecefrefz;
-
-	Matrix3f Rne;
-	Rne << -sin(refx) * cos(refy), -sin(refx) * sin(refy), cos(refx),
-		   -sin(refy), cos(refy), 0,
-		   -cos(refx) * cos(refy), -cos(refx) * sin(refy), -sin(refx);
-
-	geometry_msgs::Pose2D ins_ref;
-	ins_ref.x = refposx;
-	ins_ref.y = refposy;
-	ins_ref.theta = (3.141592 / 180)*(ref.yawPitchRoll.x);
-
-	geometry_msgs::Vector3 ecef_ref;
-	ecef_ref.x = Ecefrefx;
-	ecef_ref.y = Ecefrefy;
-	ecef_ref.z = Ecefrefz;
+	ResetNed(ref, Ecefref);
 
 	ros::Rate loop_rate(100);
 
   while (ros::ok())
   {
+
+	if (reset == true){
+		ref = vs.readInsStateLla();
+		Ecefref = vs.readInsStateEcef();
+		ResetNed(ref, Ecefref);
+		reset = false;
+	}
 
 	InsStateLlaRegister ins; //Inertial Navigation System (INS) variable declaration
 	InsStateEcefRegister Ecef; //INS with Ecef coordinates
