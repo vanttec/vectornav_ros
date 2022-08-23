@@ -2,6 +2,12 @@
 #include "vn/sensors.h"
 #include "vn/thread.h"
 #include "ros/ros.h"
+#include "sensor_msgs/Imu.h"
+#include "sensor_msgs/MagneticField.h"
+#include "sensor_msgs/NavSatFix.h"
+#include "sensor_msgs/FluidPressure.h"
+#include "sensor_msgs/Temperature.h"
+#include "nav_msgs/Odometry.h"
 #include "geometry_msgs/Pose2D.h"
 #include "geometry_msgs/Vector3.h"
 #include <math.h>
@@ -28,10 +34,12 @@ int main(int argc, char *argv[])
 	vs.connect(SensorPort, SensorBaudrate);
 
 	//ROS Publishers for each required sensor data
+	ros::Publisher imu_pub = n.advertise<sensor_msgs::Imu>("/vectornav/imu/imu", 1000); //ROS publisher from imu cpp
+	ros::Publisher gps_pub = n.advertise<sensor_msgs::NavSatFix>("/vectornav/imu/gps", 1000); // //ROS publisher from imu cpp
 	ros::Publisher ins_pos_pub = n.advertise<geometry_msgs::Pose2D>("/vectornav/ins_2d/ins_pose", 1000);
-	//ros::Publisher ins_vel_pub = n.advertise<geometry_msgs::Vector3>("ins_vel", 1000);
-	//ros::Publisher ins_acc_pub = n.advertise<geometry_msgs::Vector3>("ins_acc", 1000);
-	//ros::Publisher ins_ar_pub = n.advertise<geometry_msgs::Vector3>("ins_ar", 1000);
+	ros::Publisher ins_vel_pub = n.advertise<geometry_msgs::Vector3>("ins_vel", 1000);
+	ros::Publisher ins_acc_pub = n.advertise<geometry_msgs::Vector3>("ins_acc", 1000);
+	ros::Publisher ins_ar_pub = n.advertise<geometry_msgs::Vector3>("ins_ar", 1000);
 	ros::Publisher local_vel_pub = n.advertise<geometry_msgs::Vector3>("/vectornav/ins_2d/local_vel", 1000);
 	ros::Publisher NED_pose_pub = n.advertise<geometry_msgs::Pose2D>("/vectornav/ins_2d/NED_pose", 1000);
 	//ros::Publisher ECEF_pose_pub = n.advertise<geometry_msgs::Pose2D>("ECEF_pose", 1000);
@@ -98,11 +106,16 @@ int main(int argc, char *argv[])
   {
 
 	InsStateLlaRegister ins; //Inertial Navigation System (INS) variable declaration
+	QuaternionMagneticAccelerationAndAngularRatesRegister quat;
 	InsStateEcefRegister Ecef; //INS with Ecef coordinates
 
 	ins = vs.readInsStateLla(); //Variable that reads the INS data
+	quat = vs.readQuaternionMagneticAccelerationAndAngularRates();
 	Ecef = vs.readInsStateEcef();
 
+
+	sensor_msgs::Imu imu;	//NEW TOPIC
+	sensor_msgs::NavSatFix gps;	// NEW TOPIC
 	geometry_msgs::Pose2D ins_pose; //inertial navigation system pose (latitude, longitude, yaw)
 	geometry_msgs::Vector3 ins_vel; //velocity/speed in a global reference frame
 	geometry_msgs::Vector3 ins_acc; //acceleration
@@ -110,6 +123,23 @@ int main(int argc, char *argv[])
 	geometry_msgs::Vector3 local_vel; //veocity/speed in a local reference frame
 	geometry_msgs::Pose2D NED_pose; //pose in a local reference frame (x, y, yaw)
 	geometry_msgs::Pose2D ECEF_pose;
+
+
+	imu.orientation.x = quat.quat.x;
+	imu.orientation.y = quat.quat.y;
+	imu.orientation.z = quat.quat.z;
+	imu.orientation.w = quat.quat.w;
+
+	imu.angular_velocity.x = ins.angularRate.x; //roll rate
+	imu.angular_velocity.y = ins.angularRate.y; //pitch rate
+	imu.angular_velocity.z = ins.angularRate.z; //yaw rate (r)
+
+	imu.linear_acceleration.x = ins.accel.x; //acceleration in the x axis
+	imu.linear_acceleration.y = ins.accel.y; //acceleration in the y axis
+	imu.linear_acceleration.z = ins.accel.z; //acceleration in the z axis
+
+
+
 
 	ins_pose.x = ins.position.x; //latitude
 	ins_pose.y = ins.position.y; //longitude
@@ -129,6 +159,10 @@ int main(int argc, char *argv[])
 	ins_ar.x = ins.angularRate.x; //roll rate
 	ins_ar.y = ins.angularRate.y; //pitch rate
 	ins_ar.z = ins.angularRate.z; //yaw rate (r)
+
+	gps.latitude = ins.position.x;
+	gps.longitude = ins.position.y;
+	gps.altitude = ins.position.z;
 
 //local velocity and yaw rate
 	Vector3f eta_dot; //vector declaration of eta' = [x' y' psi'] (3 DOF global reference frame)
@@ -168,10 +202,12 @@ int main(int argc, char *argv[])
 	NED_pose.theta = ins_pose.theta;
 
 //Data publishing
+	imu_pub.publish(imu);	//IMU topic
+	gps_pub.publish(gps);	//IMU topic
     ins_pos_pub.publish(ins_pose);
-    //ins_vel_pub.publish(ins_vel);
-    //ins_acc_pub.publish(ins_acc);
-    //ins_ar_pub.publish(ins_ar);
+    ins_vel_pub.publish(ins_vel);
+    ins_acc_pub.publish(ins_acc);
+    ins_ar_pub.publish(ins_ar);
     local_vel_pub.publish(local_vel);
     NED_pose_pub.publish(NED_pose);
     //ECEF_pose_pub.publish(ECEF_pose);
