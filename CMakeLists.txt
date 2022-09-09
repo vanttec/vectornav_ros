@@ -13,6 +13,10 @@ rospy
 std_msgs 
 genmsg
 sensor_msgs
+tf2
+tf2_ros
+tf2_geometry_msgs
+
 )
 
 
@@ -224,3 +228,8 @@ add_executable(imu src/imu.cpp)
 target_link_libraries(imu ${catkin_LIBRARIES})
 target_link_libraries(imu PRIVATE libvncxx)
 target_link_libraries(imu LINK_PUBLIC pthread)
+
+add_executable(imu_path_publisher src/path_publisher.cpp)
+target_link_libraries(imu_path_publisher ${catkin_LIBRARIES})
+target_link_libraries(imu_path_publisher PRIVATE libvncxx)
+target_link_libraries(imu_path_publisher LINK_PUBLIC pthread)
