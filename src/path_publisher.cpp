@@ -31,10 +31,7 @@ Copyright		Open Source
 class SdvPathNodeClass
 {
 	public:
-		geometry_msgs::Pose2D received_pose;
-		geometry_msgs::PoseStamped stamped_pose_to_append;
-		nav_msgs::Path path_to_publish;
-		tf2::Quaternion *auxiliary_quaternion;
+
 	
 	void initializePath(){
 		sdv_path_pub = n.advertise<nav_msgs::Path>("/vectornav/rviz_data/path", 1000);
@@ -50,7 +47,7 @@ class SdvPathNodeClass
 		received_pose.theta = msg -> theta;
 		received_pose.x = msg -> x;
 		received_pose.y = msg -> y;
-		auxiliary_quaternion -> setRPY(3.1415926535, 0, -msg->theta);
+		auxiliary_quaternion -> setRPY(M_PI, 0, -msg->theta);
 		
 	}
 
@@ -82,6 +79,10 @@ class SdvPathNodeClass
 		ros::NodeHandle n;
 		ros::Publisher sdv_path_pub;
 		ros::Subscriber sdv_ned_pose_sub;
+		geometry_msgs::Pose2D received_pose;
+		geometry_msgs::PoseStamped stamped_pose_to_append;
+		nav_msgs::Path path_to_publish;
+		tf2::Quaternion *auxiliary_quaternion;
 		uint32_t path_counter = 0;
 		uint32_t pose_counter = 0;
 
