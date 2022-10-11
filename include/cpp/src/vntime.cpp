@@ -1,4 +1,4 @@
-#include "vn/vntime.h"
+#include "vn/vntime.hpp"
 
 #if _WIN32
 	#include <Windows.h>
@@ -12,7 +12,7 @@
 	#error "Unknown System"
 #endif
 
-#include "vn/exceptions.h"
+#include "vn/exceptions.hpp"
 
 using namespace std;
 

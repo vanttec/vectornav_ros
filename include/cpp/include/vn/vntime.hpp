@@ -1,8 +1,8 @@
 #ifndef _VNXPLAT_TIME_H_
 #define _VNXPLAT_TIME_H_
 
-#include "int.h"
-#include "export.h"
+#include "int.hpp"
+#include "export.hpp"
 
 namespace vn {
 namespace xplat {

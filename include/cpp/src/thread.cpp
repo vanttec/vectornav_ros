@@ -1,6 +1,6 @@
 
-#include "vn/thread.h"
-#include "vn/exceptions.h"
+#include "vn/thread.hpp"
+#include "vn/exceptions.hpp"
 
 #if _WIN32
 	#include <Windows.h>

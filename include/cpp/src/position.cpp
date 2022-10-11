@@ -1,4 +1,4 @@
-#include "vn/position.h"
+#include "vn/position.hpp"
 
 using namespace std;
 

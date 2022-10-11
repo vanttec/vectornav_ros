@@ -1,10 +1,10 @@
 #ifndef _VNSENSORS_REGISTERS_H_
 #define _VNSENSORS_REGISTERS_H_
 
-#include "int.h"
-#include "vector.h"
-#include "matrix.h"
-#include "types.h"
+#include "int.hpp"
+#include "vector.hpp"
+#include "matrix.hpp"
+#include "types.hpp"
 
 namespace vn {
 namespace sensors {

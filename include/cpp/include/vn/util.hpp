@@ -2,7 +2,7 @@
 #define _VNPROTOCOL_UART_UTIL_H_
 
 #include <string>
-#include "types.h"
+#include "types.hpp"
 
 namespace vn {
 namespace protocol {

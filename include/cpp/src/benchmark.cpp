@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <iostream>
 
-#include "hayai_main.hpp"
+#include "hayai_main.h"
 
 int main(int argc, char* argv[])
 {

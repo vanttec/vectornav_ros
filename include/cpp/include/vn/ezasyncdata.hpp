@@ -3,13 +3,13 @@
 
 #include <string>
 
-#include "vn/int.h"
-#include "vn/nocopy.h"
-#include "vn/sensors.h"
-#include "vn/compositedata.h"
-#include "vn/criticalsection.h"
-#include "vn/event.h"
-#include "vn/export.h"
+#include "vn/int.hpp"
+#include "vn/nocopy.hpp"
+#include "vn/sensors.hpp"
+#include "vn/compositedata.hpp"
+#include "vn/criticalsection.hpp"
+#include "vn/event.hpp"
+#include "vn/export.hpp"
 
 namespace vn {
 namespace sensors {

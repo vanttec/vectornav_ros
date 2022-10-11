@@ -1,5 +1,5 @@
-#include "vn/conversions.h"
-#include "vn/consts.h"
+#include "vn/conversions.hpp"
+#include "vn/consts.hpp"
 
 namespace vn {
 namespace math {

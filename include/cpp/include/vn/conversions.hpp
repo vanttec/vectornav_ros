@@ -1,9 +1,9 @@
 #ifndef _VN_MATH_CONVERSIONS_H_
 #define _VN_MATH_CONVERSIONS_H_
 
-#include "export.h"
-#include "vector.h"
-#include "matrix.h"
+#include "export.hpp"
+#include "vector.hpp"
+#include "matrix.hpp"
 
 namespace vn {
 namespace math {

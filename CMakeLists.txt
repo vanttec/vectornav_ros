@@ -1,23 +1,28 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.5)
 project(vectornav-ros)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
+if(NOT CMAKE_CXX_STANDARD)
+  set(CMAKE_CXX_STANDARD 14)
+endif()
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
+
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED COMPONENTS
-roscpp
-rospy 
-std_msgs 
-genmsg
-sensor_msgs
-tf2
-tf2_ros
-tf2_geometry_msgs
 
-)
+find_package(ament_cmake REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(rclpy REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(tf2 REQUIRED)
+find_package(tf2_ros REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
+
 
 
 ## System dependencies are found with CMake's conventions
@@ -109,12 +114,7 @@ tf2_geometry_msgs
 ## LIBRARIES: libraries you create in this project that dependent projects also need
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
-catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES vectornav
-#  CATKIN_DEPENDS roscpp rospy std_msgs
-#  DEPENDS system_lib
-)
+
 
 ###########
 ## Build ##
@@ -124,7 +124,7 @@ catkin_package(
 ## Your package locations should be listed before other locations
 include_directories(
 #include
- ${catkin_INCLUDE_DIRS}
+#${catkin_INCLUDE_DIRS}
  include/cpp/include
 )
 
@@ -213,23 +213,39 @@ include_directories(
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
-add_subdirectory(include/cpp libvncxx)
+include_directories(include)
+add_subdirectory(include/cpp)
+
 add_executable(ins_2d src/ins_2d.cpp)
-target_link_libraries(ins_2d ${catkin_LIBRARIES})
-target_link_libraries(ins_2d PRIVATE libvncxx)
-target_link_libraries(ins_2d LINK_PUBLIC pthread)
 
-add_executable(ins_3d src/ins_3d.cpp)
-target_link_libraries(ins_3d ${catkin_LIBRARIES})
-target_link_libraries(ins_3d PRIVATE libvncxx)
-target_link_libraries(ins_3d LINK_PUBLIC pthread)
+# add_executable(imu_path_publisher src/path_publisher.cpp)
+# target_link_libraries(ins_2d ${catkin_LIBRARIES}
+                              # libvncxx
+                              # pthread
+                              # rclcpp)
 
-add_executable(imu src/imu.cpp)
-target_link_libraries(imu ${catkin_LIBRARIES})
-target_link_libraries(imu PRIVATE libvncxx)
-target_link_libraries(imu LINK_PUBLIC pthread)
+# target_include_directories(ins_2d
+#   PUBLIC
+#     $<BUILDw_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+#     $<INSTALL_INTERFACE:include>)
 
-add_executable(imu_path_publisher src/path_publisher.cpp)
-target_link_libraries(imu_path_publisher ${catkin_LIBRARIES})
-target_link_libraries(imu_path_publisher PRIVATE libvncxx)
-target_link_libraries(imu_path_publisher LINK_PUBLIC pthread)
+
+target_link_libraries(ins_2d libvncxx)
+
+# ament_target_dependencies(ins_2d
+#    rclcpp
+#    std_msgs
+#    )
+
+
+ament_target_dependencies(ins_2d
+ament_cmake
+rclcpp
+std_msgs
+sensor_msgs
+geometry_msgs
+)
+
+ament_export_include_directories(include)
+ament_export_dependencies(std_msgs)
+ament_package( )

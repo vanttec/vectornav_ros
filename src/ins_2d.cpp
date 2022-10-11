@@ -1,17 +1,16 @@
 #include <iostream>
-#include "vn/sensors.h"
-#include "vn/thread.h"
-#include "ros/ros.h"
-#include "sensor_msgs/Imu.h"
-#include "sensor_msgs/MagneticField.h"
-#include "sensor_msgs/NavSatFix.h"
-#include "sensor_msgs/FluidPressure.h"
-#include "sensor_msgs/Temperature.h"
-#include "nav_msgs/Odometry.h"
-#include "geometry_msgs/Pose2D.h"
-#include "geometry_msgs/Vector3.h"
-#include <math.h>
 #include <eigen3/Eigen/Dense>
+#include "vn/sensors.hpp"
+#include "vn/thread.hpp"
+#include "rclcpp/rclcpp.hpp"
+#include "sensor_msgs/msg/imu.hpp"
+#include "sensor_msgs/msg/magnetic_field.hpp"
+#include "sensor_msgs/msg/nav_sat_fix.hpp"
+#include "sensor_msgs/msg/fluid_pressure.hpp"
+#include "sensor_msgs/msg/temperature.hpp"
+#include "nav_msgs/msg/odometry.hpp"
+#include "geometry_msgs/msg/pose2_d.hpp"
+#include "geometry_msgs/msg/vector3.hpp"
 
 using namespace std;
 using namespace vn::math;
@@ -23,28 +22,29 @@ using namespace Eigen;
 int main(int argc, char *argv[])
 {
 
-	ros::init(argc, argv, "ins_2d");
+	rclcpp::init(argc, argv);
+	auto node = rclcpp::Node::make_shared("vn_sdv");
 
-  	ros::NodeHandle n;
-	
-	const string SensorPort = "/dev/ttyUSB0";                  // Linux format for virtual (USB) serial port.
+
+	const string SensorPort = "/dev/ttyUSB0";      // Linux format for virtual (USB) serial port.
 	const uint32_t SensorBaudrate = 115200;
 
 	VnSensor vs;
 	vs.connect(SensorPort, SensorBaudrate);
 
 	//ROS Publishers for each required sensor data
-	ros::Publisher imu_pub = n.advertise<sensor_msgs::Imu>("/vectornav/imu/imu", 1000); //ROS publisher from imu cpp
-	ros::Publisher gps_pub = n.advertise<sensor_msgs::NavSatFix>("/vectornav/imu/gps", 1000); // //ROS publisher from imu cpp
-	ros::Publisher ins_pos_pub = n.advertise<geometry_msgs::Pose2D>("/vectornav/ins_2d/ins_pose", 1000);
-	ros::Publisher ins_vel_pub = n.advertise<geometry_msgs::Vector3>("ins_vel", 1000);
-	ros::Publisher ins_acc_pub = n.advertise<geometry_msgs::Vector3>("ins_acc", 1000);
-	ros::Publisher ins_ar_pub = n.advertise<geometry_msgs::Vector3>("ins_ar", 1000);
-	ros::Publisher local_vel_pub = n.advertise<geometry_msgs::Vector3>("/vectornav/ins_2d/local_vel", 1000);
-	ros::Publisher NED_pose_pub = n.advertise<geometry_msgs::Pose2D>("/vectornav/ins_2d/NED_pose", 1000);
-	//ros::Publisher ECEF_pose_pub = n.advertise<geometry_msgs::Pose2D>("ECEF_pose", 1000);
-	ros::Publisher ins_ref_pub = n.advertise<geometry_msgs::Pose2D>("/vectornav/ins_2d/ins_ref", 1000);
-	//ros::Publisher ecef_ref_pub = n.advertise<geometry_msgs::Vector3>("/vectornav/ins_2d/ecef_ref", 1000);
+	
+	auto imu_pub = node->create_publisher<sensor_msgs::msg::Imu>("/vectornav/imu/imu", 1000);
+	auto gps_pub = node->create_publisher<sensor_msgs::msg::NavSatFix>("/vectornav/imu/gps", 1000);
+	auto ins_pos_pub = node->create_publisher<geometry_msgs::msg::Pose2D>("/vectornav/ins_2d/ins_pose", 1000);
+	auto ins_vel_pub = node->create_publisher<geometry_msgs::msg::Vector3>("ins_vel", 1000);
+	auto ins_acc_pub = node->create_publisher<geometry_msgs::msg::Vector3>("ins_acc", 1000);
+	auto ins_ar_pub = node->create_publisher<geometry_msgs::msg::Vector3>("ins_ar", 1000);
+	auto local_vel_pub = node->create_publisher<geometry_msgs::msg::Vector3>("/vectornav/ins_2d/local_vel", 1000);
+	auto NED_pose_pub = node->create_publisher<geometry_msgs::msg::Pose2D>("/vectornav/ins_2d/NED_pose", 1000);
+	auto ECEF_pose_pub = node->create_publisher<geometry_msgs::msg::Pose2D>("ECEF_pose", 1000);
+	auto ins_ref_pub = node->create_publisher<geometry_msgs::msg::Pose2D>("/vectornav/ins_2d/ins_ref", 1000);
+	auto ecef_ref_pub = node->create_publisher<geometry_msgs::msg::Vector3>("/vectornav/ins_2d/ecef_ref", 1000);
 
 	//Transformation of coordinates Geodetic-Ecef-NED for the reference
 	int R_Ea = 6378137; //Earth radious
@@ -90,21 +90,20 @@ int main(int argc, char *argv[])
 		   -sin(refy), cos(refy), 0,
 		   -cos(refx) * cos(refy), -cos(refx) * sin(refy), -sin(refx);
 
-	geometry_msgs::Pose2D ins_ref;
+	geometry_msgs::msg::Pose2D ins_ref;
 	ins_ref.x = refposx;
 	ins_ref.y = refposy;
 	ins_ref.theta = (3.141592 / 180)*(ref.yawPitchRoll.x);
 
-	geometry_msgs::Vector3 ecef_ref;
+	geometry_msgs::msg::Vector3 ecef_ref;
 	ecef_ref.x = Ecefrefx;
 	ecef_ref.y = Ecefrefy;
 	ecef_ref.z = Ecefrefz;
 
-	ros::Rate loop_rate(100);
+	rclcpp::Rate loop_rate(100);
 
-  while (ros::ok())
+  while (rclcpp::ok())
   {
-
 	InsStateLlaRegister ins; //Inertial Navigation System (INS) variable declaration
 	QuaternionMagneticAccelerationAndAngularRatesRegister quat;
 	InsStateEcefRegister Ecef; //INS with Ecef coordinates
@@ -114,15 +113,15 @@ int main(int argc, char *argv[])
 	Ecef = vs.readInsStateEcef();
 
 
-	sensor_msgs::Imu imu;	//NEW TOPIC
-	sensor_msgs::NavSatFix gps;	// NEW TOPIC
-	geometry_msgs::Pose2D ins_pose; //inertial navigation system pose (latitude, longitude, yaw)
-	geometry_msgs::Vector3 ins_vel; //velocity/speed in a global reference frame
-	geometry_msgs::Vector3 ins_acc; //acceleration
-	geometry_msgs::Vector3 ins_ar; //angular rate
-	geometry_msgs::Vector3 local_vel; //veocity/speed in a local reference frame
-	geometry_msgs::Pose2D NED_pose; //pose in a local reference frame (x, y, yaw)
-	geometry_msgs::Pose2D ECEF_pose;
+	sensor_msgs::msg::Imu imu;	//NEW TOPIC
+	sensor_msgs::msg::NavSatFix gps;	// NEW TOPIC
+	geometry_msgs::msg::Pose2D ins_pose; //inertial navigation system pose (latitude, longitude, yaw)
+	geometry_msgs::msg::Vector3 ins_vel; //velocity/speed in a global reference frame
+	geometry_msgs::msg::Vector3 ins_acc; //acceleration
+	geometry_msgs::msg::Vector3 ins_ar; //angular rate
+	geometry_msgs::msg::Vector3 local_vel; //veocity/speed in a local reference frame
+	geometry_msgs::msg::Pose2D NED_pose; //pose in a local reference frame (x, y, yaw)
+	geometry_msgs::msg::Pose2D ECEF_pose;
 
 
 	imu.orientation.x = quat.quat.x;
@@ -193,7 +192,7 @@ int main(int argc, char *argv[])
 	ECEF_pose.theta = ins_pose.theta;
 
 //NED from Ecef coordinates
-	Vector3f NED;
+	Eigen::  Vector3f NED;
 	NED = Rne * (Pe - Pe_ref);
 	float N = NED(0);
 	float E = NED(1);
@@ -202,19 +201,19 @@ int main(int argc, char *argv[])
 	NED_pose.theta = ins_pose.theta;
 
 //Data publishing
-	imu_pub.publish(imu);	//IMU topic
-	gps_pub.publish(gps);	//IMU topic
-    ins_pos_pub.publish(ins_pose);
-    ins_vel_pub.publish(ins_vel);
-    ins_acc_pub.publish(ins_acc);
-    ins_ar_pub.publish(ins_ar);
-    local_vel_pub.publish(local_vel);
-    NED_pose_pub.publish(NED_pose);
+	imu_pub -> publish(imu);	//IMU topic
+	gps_pub -> publish(gps);	//IMU topic
+    ins_pos_pub -> publish(ins_pose);
+    ins_vel_pub -> publish(ins_vel);
+    ins_acc_pub ->publish(ins_acc);
+    ins_ar_pub -> publish(ins_ar);
+    local_vel_pub -> publish(local_vel);
+    NED_pose_pub -> publish(NED_pose);
     //ECEF_pose_pub.publish(ECEF_pose);
-    ins_ref_pub.publish(ins_ref);
+    ins_ref_pub -> publish(ins_ref);
     //ecef_ref_pub.publish(ecef_ref);
 
-    ros::spinOnce();
+    rclcpp::spin_some(node);
 
     loop_rate.sleep();
   }

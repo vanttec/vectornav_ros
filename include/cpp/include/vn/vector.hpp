@@ -11,8 +11,8 @@
 #include <ostream>
 #include <cmath>
 
-#include "exceptions.h"
-#include "int.h"
+#include "exceptions.hpp"
+#include "int.hpp"
 
 namespace vn {
 namespace math {

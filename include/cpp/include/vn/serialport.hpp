@@ -10,13 +10,13 @@
 #include <list>
 
 #if PYTHON
-	#include "boostpython.h"
+	#include "boostpython.hpp"
 #endif
 
-#include "int.h"
-#include "port.h"
-#include "nocopy.h"
-#include "export.h"
+#include "int.hpp"
+#include "port.hpp"
+#include "nocopy.hpp"
+#include "export.hpp"
 
 namespace vn {
 namespace xplat {

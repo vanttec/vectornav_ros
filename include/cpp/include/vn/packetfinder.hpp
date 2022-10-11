@@ -1,9 +1,9 @@
 #ifndef _VNPROTOCOL_UART_PACKETFINDER_H_
 #define _VNPROTOCOL_UART_PACKETFINDER_H_
 
-#include "nocopy.h"
-#include "vntime.h"
-#include "packet.h"
+#include "nocopy.hpp"
+#include "vntime.hpp"
+#include "packet.hpp"
 
 #if PYTHON
 	#include "vn/util/boostpython.h"

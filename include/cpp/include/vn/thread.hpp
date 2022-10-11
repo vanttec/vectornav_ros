@@ -6,12 +6,12 @@
 #ifndef _VNXPLAT_THREAD_H_
 #define _VNXPLAT_THREAD_H_
 
-#include "int.h"
-#include "export.h"
-#include "nocopy.h"
+#include "int.hpp"
+#include "export.hpp"
+#include "nocopy.hpp"
 
 #if _WIN32
-#include <Windows.h>
+#include <Windows.hpp>
 #elif __linux__ || __APPLE__ || __CYGWIN__ || __QNXNTO__
 #include <pthread.h>
 #include <unistd.h>

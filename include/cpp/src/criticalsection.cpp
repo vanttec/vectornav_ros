@@ -1,4 +1,4 @@
-#include "vn/criticalsection.h"
+#include "vn/criticalsection.hpp"
 
 #if _WIN32
 	#include <Windows.h>
@@ -8,7 +8,7 @@
 	#error "Unknown System"
 #endif
 
-#include "vn/exceptions.h"
+#include "vn/exceptions.hpp"
 
 using namespace std;
 

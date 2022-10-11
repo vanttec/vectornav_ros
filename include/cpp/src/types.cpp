@@ -1,4 +1,4 @@
-#include "vn/types.h"
+#include "vn/types.hpp"
 
 namespace vn {
 namespace protocol {

@@ -4,7 +4,7 @@
 #include <cstddef>
 #include <string>
 
-#include "int.h"
+#include "int.hpp"
 
 namespace vn {
 namespace data {

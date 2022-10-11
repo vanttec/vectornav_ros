@@ -1,9 +1,9 @@
 #ifndef _VNXPLAT_EVENT_H_
 #define _VNXPLAT_EVENT_H_
 
-#include "nocopy.h"
-#include "int.h"
-#include "export.h"
+#include "nocopy.hpp"
+#include "int.hpp"
+#include "export.hpp"
 
 namespace vn {
 namespace xplat {

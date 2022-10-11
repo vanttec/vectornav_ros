@@ -1,6 +1,6 @@
-#include "vn/util.h"
+#include "vn/util.hpp"
 
-#include "vn/exceptions.h"
+#include "vn/exceptions.hpp"
 
 using namespace std;
 

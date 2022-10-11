@@ -1,4 +1,4 @@
-#include "vn/error_detection.h"
+#include "vn/error_detection.hpp"
 
 #include <iostream>
 using namespace std;

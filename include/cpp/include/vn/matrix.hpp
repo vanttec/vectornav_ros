@@ -9,8 +9,8 @@
 #include <cassert>
 #include <iostream>
 
-#include "vector.h"
-#include "exceptions.h"
+#include "vector.hpp"
+#include "exceptions.hpp"
 
 namespace vn {
 namespace math {

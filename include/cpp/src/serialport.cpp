@@ -1,4 +1,4 @@
-#include "vn/serialport.h"
+#include "vn/serialport.hpp"
 
 #if _WIN32
 	#include <Windows.h>
@@ -32,11 +32,11 @@
 #include <list>
 #include <iostream>
 
-#include "vn/thread.h"
-#include "vn/criticalsection.h"
-#include "vn/exceptions.h"
-#include "vn/event.h"
-#include "vn/compiler.h"
+#include "vn/thread.hpp"
+#include "vn/criticalsection.hpp"
+#include "vn/exceptions.hpp"
+#include "vn/event.hpp"
+#include "vn/compiler.hpp"
 
 #if PYTHON
 	#include "util.h"

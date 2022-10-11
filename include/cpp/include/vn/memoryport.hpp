@@ -17,9 +17,9 @@
 	#pragma warning(pop)
 #endif
 
-#include "int.h"
-#include "port.h"
-#include "nocopy.h"
+#include "int.hpp"
+#include "port.hpp"
+#include "nocopy.hpp"
 
 namespace vn {
 namespace util {

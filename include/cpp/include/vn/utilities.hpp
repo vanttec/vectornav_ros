@@ -6,8 +6,8 @@
 #include <string>
 #include <vector>
 
-#include "int.h"
-#include "export.h"
+#include "int.hpp"
+#include "export.hpp"
 
 /// \brief Defines for the specific version of the VectorNav library.
 #define VNAPI_MAJOR		1

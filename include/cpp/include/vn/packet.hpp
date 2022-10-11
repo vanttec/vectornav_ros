@@ -1,11 +1,11 @@
 #ifndef _VNPROTOCOL_UART_PACKET_H_
 #define _VNPROTOCOL_UART_PACKET_H_
 
-#include "int.h"
-#include "vector.h"
-#include "matrix.h"
-#include "nocopy.h"
-#include "types.h"
+#include "int.hpp"
+#include "vector.hpp"
+#include "matrix.hpp"
+#include "nocopy.hpp"
+#include "types.hpp"
 
 namespace vn {
 namespace protocol {

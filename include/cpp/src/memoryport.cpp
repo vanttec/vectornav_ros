@@ -1,6 +1,6 @@
-#include "vn/memoryport.h"
-#include "vn/criticalsection.h"
-#include "vn/exceptions.h"
+#include "vn/memoryport.hpp"
+#include "vn/criticalsection.hpp"
+#include "vn/exceptions.hpp"
 
 #include <list>
 

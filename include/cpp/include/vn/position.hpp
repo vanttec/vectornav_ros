@@ -1,7 +1,7 @@
 #ifndef _VNMATH_POSITION_H_
 #define _VNMATH_POSITION_H_
 
-#include "vector.h"
+#include "vector.hpp"
 
 namespace vn {
 namespace math {

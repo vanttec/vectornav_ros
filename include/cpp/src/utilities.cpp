@@ -1,5 +1,5 @@
-#include "vn/export.h"
-#include "vn/utilities.h"
+#include "vn/export.hpp"
+#include "vn/utilities.hpp"
 
 #include <sstream>
 

@@ -1,6 +1,6 @@
-#include "vn/packetfinder.h"
-#include "vn/utilities.h"
-#include "vn/error_detection.h"
+#include "vn/packetfinder.hpp"
+#include "vn/utilities.hpp"
+#include "vn/error_detection.hpp"
 
 #include <queue>
 #include <list>

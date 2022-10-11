@@ -3,7 +3,7 @@
 
 #include <cstddef>
 
-#include "export.h"
+#include "export.hpp"
 
 namespace vn {
 namespace xplat {

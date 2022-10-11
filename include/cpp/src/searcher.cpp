@@ -1,8 +1,8 @@
-#include "vn/searcher.h"
-#include "vn/serialport.h"
-#include "vn/event.h"
-#include "vn/thread.h"
-#include "vn/packetfinder.h"
+#include "vn/searcher.hpp"
+#include "vn/serialport.hpp"
+#include "vn/event.hpp"
+#include "vn/thread.hpp"
+#include "vn/packetfinder.hpp"
 
 #include <list>
 

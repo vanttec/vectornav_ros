@@ -1,7 +1,7 @@
-#include "vn/packet.h"
-#include "vn/utilities.h"
-#include "vn/error_detection.h"
-#include "vn/compiler.h"
+#include "vn/packet.hpp"
+#include "vn/utilities.hpp"
+#include "vn/error_detection.hpp"
+#include "vn/compiler.hpp"
 
 // TODO : Remove all C style coding where possible
 #include <stdio.h>

@@ -1,7 +1,7 @@
 #ifndef _VNPROTOCOL_UART_TYPES_H_
 #define _VNPROTOCOL_UART_TYPES_H_
 
-#include "int.h"
+#include "int.hpp"
 
 namespace vn {
 namespace protocol {

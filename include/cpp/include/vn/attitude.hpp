@@ -1,9 +1,9 @@
 #ifndef _VNMATH_ATTITUDE_H_
 #define _VNMATH_ATTITUDE_H_
 
-#include "vector.h"
-#include "matrix.h"
-#include "export.h"
+#include "vector.hpp"
+#include "matrix.hpp"
+#include "export.hpp"
 
 namespace vn {
 namespace math {

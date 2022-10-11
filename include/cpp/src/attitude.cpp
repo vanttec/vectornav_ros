@@ -1,6 +1,6 @@
-#include "vn/attitude.h"
-#include "vn/exceptions.h"
-#include "vn/conversions.h"
+#include "vn/attitude.hpp"
+#include "vn/exceptions.hpp"
+#include "vn/conversions.hpp"
 
 using namespace std;
 

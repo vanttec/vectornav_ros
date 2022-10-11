@@ -1,5 +1,5 @@
-#include "vn/compositedata.h"
-#include "vn/conversions.h"
+#include "vn/compositedata.hpp"
+#include "vn/conversions.hpp"
 
 using namespace std;
 using namespace vn::math;

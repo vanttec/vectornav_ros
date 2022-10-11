@@ -1,5 +1,5 @@
-#include "vn/event.h"
-#include "vn/exceptions.h"
+#include "vn/event.hpp"
+#include "vn/exceptions.hpp"
 
 #if _WIN32
 	#include <Windows.h>

@@ -2,17 +2,17 @@
 #define _VNSENSORS_SENSORS_H_
 
 #if PYTHON
-	#include "boostpython.h"
+	#include "boostpython.hpp"
 #endif
 
 #include <string>
 #include <vector>
 
-#include "int.h"
-#include "nocopy.h"
-#include "packetfinder.h"
-#include "export.h"
-#include "registers.h"
+#include "int.hpp"
+#include "nocopy.hpp"
+#include "packetfinder.hpp"
+#include "export.hpp"
+#include "registers.hpp"
 
 #if PYTHON
 	#include "vn/event.h"

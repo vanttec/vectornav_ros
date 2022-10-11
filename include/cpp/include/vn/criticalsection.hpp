@@ -6,8 +6,8 @@
 #ifndef _VNXPLAT_CRITICALSECTION_H_
 #define _VNXPLAT_CRITICALSECTION_H_
 
-#include "nocopy.h"
-#include "export.h"
+#include "nocopy.hpp"
+#include "export.hpp"
 
 namespace vn {
 namespace xplat {

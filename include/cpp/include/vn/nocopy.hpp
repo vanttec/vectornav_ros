@@ -3,7 +3,7 @@
 #ifndef _VNUTIL_NOCOPY_H_
 #define _VNUTIL_NOCOPY_H_
 
-#include "export.h"
+#include "export.hpp"
 
 namespace vn {
 namespace util {

@@ -4,8 +4,8 @@
 #include <string>
 #include <vector>
 
-#include "int.h"
-#include "export.h"
+#include "int.hpp"
+#include "export.hpp"
 
 namespace vn {
 namespace sensors {

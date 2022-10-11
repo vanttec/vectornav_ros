@@ -1,15 +1,15 @@
 
-#include "vn/sensors.h"
-#include "vn/serialport.h"
-#include "vn/criticalsection.h"
-#include "vn/vntime.h"
-#include "vn/event.h"
-#include "vn/exceptions.h"
-#include "vn/error_detection.h"
-#include "vn/vector.h"
-#include "vn/matrix.h"
-#include "vn/compiler.h"
-#include "vn/util.h"
+#include "vn/sensors.hpp"
+#include "vn/serialport.hpp"
+#include "vn/criticalsection.hpp"
+#include "vn/vntime.hpp"
+#include "vn/event.hpp"
+#include "vn/exceptions.hpp"
+#include "vn/error_detection.hpp"
+#include "vn/vector.hpp"
+#include "vn/matrix.hpp"
+#include "vn/compiler.hpp"
+#include "vn/util.hpp"
 
 #include <string>
 #include <queue>
