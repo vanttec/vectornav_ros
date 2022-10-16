@@ -248,4 +248,9 @@ geometry_msgs
 
 ament_export_include_directories(include)
 ament_export_dependencies(std_msgs)
+
+install(TARGETS
+ins_2d
+DESTINATION lib/${PROJECT_NAME})
+
 ament_package( )
